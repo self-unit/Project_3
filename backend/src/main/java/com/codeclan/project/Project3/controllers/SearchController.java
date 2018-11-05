@@ -14,14 +14,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RestController
 public class SearchController {
 
-    private static final String TEMPLATE = "Hello, %s!";
+    private static final String TEMPLATE = "You searched for, %s!";
 
     @RequestMapping("/search")
     public HttpEntity<Search> search(
-            @RequestParam(value = "name", required=false, defaultValue = "Word") String name) {
+            @RequestParam(value = "item", required=false, defaultValue = "Word") String item) {
 
-        Search search = new Search(String.format(TEMPLATE, name));
-        search.add(linkTo(methodOn(SearchController.class).search(name)).withSelfRel());
+        Search search = new Search(String.format(TEMPLATE, item));
+        search.add(linkTo(methodOn(SearchController.class).search(item)).withSelfRel());
 
         return new ResponseEntity<>(search, HttpStatus.OK);
     }
