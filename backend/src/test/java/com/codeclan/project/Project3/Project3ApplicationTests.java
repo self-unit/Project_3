@@ -16,9 +16,4 @@ public class Project3ApplicationTests {
 	public void contextLoads() {
 	}
 
-	@Test
-	public void testScraper() throws IOException {
-
-	}
-
 }

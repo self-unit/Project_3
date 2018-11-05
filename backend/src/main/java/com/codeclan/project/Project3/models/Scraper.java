@@ -19,22 +19,26 @@ public class Scraper {
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-        int nResult = 0;
-        boolean found = false;
-        while(found == false){
-            Element curProduct = doc.select("#result_" + nResult).first();
-            if(!curProduct.html().contains("sponsored")) {
-                found = true;
-            } else {
-                nResult++;
+        if(!html.contains("did not match any products")) {
+            int nResult = 0;
+            boolean found = false;
+            while (found == false) {
+                Element curProduct = doc.select("#result_" + nResult).first();
+                if (!curProduct.html().contains("sponsored")) {
+                    found = true;
+                } else {
+                    nResult++;
+                }
             }
+
+            Element product = doc.select("#result_" + nResult).first();
+            Element elASIN = product.select("[data-asin]").first();
+
+            System.out.println(elASIN.attr("data-asin"));
+            this.ASIN = elASIN.attr("data-asin");
         }
 
-        Element product = doc.select("#result_" + nResult).first();
-        Element elASIN = product.select("[data-asin]").first();
-
-        System.out.println(elASIN.attr("data-asin"));
-        this.ASIN = elASIN.attr("data-asin");
+        System.out.println(this.ASIN);
     }
 
 
