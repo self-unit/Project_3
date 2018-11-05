@@ -75,10 +75,11 @@ public class Scraper {
 
     public void getAllCountriesPrices() throws IOException {
 
-        // not working:, ".cn", ".nl"
+        // not working:, ".cn", ".nl", ".in"
+        // , ".com" (temporamental)
 
-        String[] domains = {".co.uk", ".de", ".fr",
-                ".it", ".es", ".co.jp", ".com.tr", ".com.mx", ".com.br", ".com", ".nl", ".in", ".com.sg", ".ca"};
+        String[] domains = {".nl", ".co.uk", ".de", ".fr",
+                ".it", ".es", ".co.jp", ".com.mx", ".com.br", ".ca"};
 
         for (int i = 0; i < domains.length - 1; i++) {
             System.out.println(domains[i]);
