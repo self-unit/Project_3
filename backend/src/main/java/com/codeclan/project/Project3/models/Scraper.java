@@ -41,16 +41,10 @@ public class Scraper {
         }
     }
 
-    public HashMap<String, String> getInfo() throws IOException {
+    public HashMap<String, String> getInfo(String domain) throws IOException {
         HashMap<String, String> result = new HashMap<String, String>();
 
-        String[] domains = {".co.uk", ".com", ".ca", ".de", ".fr",
-                            ".it", ".nl", ".es", ".in", ".co.jp",
-                            ".com.sg", ".cn", ".com.tr", ".com.mx",
-                            ".com.au", ".com.br"};
-
-        String curDomain = domains[0];
-        String searchPage = "https://www.amazon" + curDomain + "/s/field-keywords=" + this.productName;
+        String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + this.productName; // ASIN
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
@@ -72,11 +66,24 @@ public class Scraper {
         String price = elPrice.text();
         result.put("price", price);
 
-        Element elRating = elProduct.select("span.a-icon-alt").last();
+        Element elRating = elProduct.select("span.a-icon-alt").last(); // NEEDS REFACTORED FOR DIFFERENT LANGUAGES
         String rating = elRating.text().replace(" out of 5", "").replace(" stars", "");
         result.put("rating", rating);
 
         return result;
+    }
+
+    public void getAllCountriesPrices() throws IOException {
+
+        // not working:, ".cn", ".nl"
+
+        String[] domains = {".co.uk", ".de", ".fr",
+                ".it", ".es", ".co.jp", ".com.tr", ".com.mx", ".com.br", ".com", ".nl", ".in", ".com.sg", ".ca"};
+
+        for (int i = 0; i < domains.length - 1; i++) {
+            System.out.println(domains[i]);
+            System.out.println(getInfo(domains[i]));
+        }
     }
 
 

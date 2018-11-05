@@ -13,6 +13,6 @@ public class Project3Application {
 //		SpringApplication.run(Project3Application.class, args);
 		Scraper scraper = new Scraper("ps4 console");
 		scraper.getASIN();
-		System.out.println(scraper.getInfo());
+		scraper.getAllCountriesPrices();
 	}
 }
