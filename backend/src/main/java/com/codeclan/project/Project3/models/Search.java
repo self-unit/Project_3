@@ -9,7 +9,7 @@ public class Search extends ResourceSupport {
     private final String content;
 
     @JsonCreator
-    public SearchItem(@JsonProperty("content") String content) {
+    public Search(@JsonProperty("content") String content) {
         this.content = content;
     }
 
