@@ -14,7 +14,7 @@ public class Scraper {
         this.ASIN = null;
     }
 
-    public String getASIN() throws IOException {
+    public void getASIN() throws IOException {
         String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.productName;
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
@@ -31,8 +31,10 @@ public class Scraper {
         }
 
         Element product = doc.select("#result_" + nResult).first();
+        Element elASIN = product.select("[data-asin]").first();
 
-        return null;
+        System.out.println(elASIN.attr("data-asin"));
+        this.ASIN = elASIN.attr("data-asin");
     }
 
 
