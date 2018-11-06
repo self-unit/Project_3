@@ -11,7 +11,7 @@ class Main extends Component {
         this.state = {
             text: '',
             currency: '',
-            results: [{
+            results: {
               productName: "Call of Duty: Black Ops 4 (PS4)",
               image: "https://images-eu.ssl-images-amazon.com/images/I/51dKoETIm1L._AC_US436_FMwebp_QL65_.jpg",
               rating: 3.3,
@@ -21,7 +21,7 @@ class Main extends Component {
                 { country: "UK", price: "£46.75", url: "http://amazon.co.uk/url2buy" },
                 { country: "USA", price: "$56.75", url: "http://amazon.com/url2buy" }
             ]
-          }]
+          }
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -59,6 +59,12 @@ class Main extends Component {
 
         //reset form
         this.setState({ text: '' })
+    }
+
+    handleResultSubmit(newResult) {
+      newResult.id = Date.now();
+      const updatedResults= [this.state.results, newResult];
+      this.setState({results: updatedResults})
     }
 
     render() {

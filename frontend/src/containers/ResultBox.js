@@ -2,7 +2,15 @@ import React from 'react';
 import SearchBox from './SearchBox';
 import ResultList from '../components/ResultList';
 
-const Results = () => (
+const Results = ({results}) => {
+
+  for (var key in results) {
+    if (results.hasOwnProperty(key)) {
+      console.log(key +':'+ results[key]);
+    }
+  }
+
+  return (
     <div className='resultPage'>
         <h1>Result Box</h1>
         <div className="productSearch">
@@ -11,6 +19,7 @@ const Results = () => (
         </div>
         <div className='productInfo'>
             <h4>Product Info Box</h4>
+
         </div>
         <div className='resultList'>
             <h4>Result List:</h4>
@@ -21,6 +30,7 @@ const Results = () => (
 
         </div> */}
     </div>
-);
+  )
+};
 
 export default Results;

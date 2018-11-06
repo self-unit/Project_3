@@ -2,12 +2,12 @@ import React from 'react';
 
 const ProductInfo = () =>{
 
-    const name = details.name;
+    const name = details.productName;
     const img = details.image;
     const rating = details.rating;
     const price = details.price;
-    const highestPrice = details.highestPrice;
-    const lowestPrice = details.lowestPrice;
+    const highestPrice = details.highPrice;
+    const lowestPrice = details.lowPrice;
     const savings = details.savings;
 
     return(

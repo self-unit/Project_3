@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const SearchBox = ({search, currency, handleSubmit, handleChange, handleInput}) => {
 
     return (
