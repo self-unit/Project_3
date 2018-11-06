@@ -8,24 +8,11 @@ import java.util.HashMap;
 
 public class Scraper {
     private String productName;
-    private String ASIN;
-    private int rating;
+    private double rating;
 
     public Scraper(String productName) {
         this.productName = productName.replace(" ", "%20");
         this.rating = 0;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getASIN() {
-        return ASIN;
-    }
-
-    public int getRating() {
-        return rating;
     }
 
     public boolean hasBadKeyword(String text) {
@@ -43,7 +30,7 @@ public class Scraper {
     public String getProductASIN() throws IOException {
         String result = null;
 
-        String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.productName;
+        String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.productName; // Add a check for null, try .com instead
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
@@ -60,9 +47,11 @@ public class Scraper {
                 }
             }
 
-            Element product = doc.select("#result_" + iResult).first();
-            Element elASIN = product.select("[data-asin]").first();
+            Element elProduct = doc.select("#result_" + iResult).first();
+            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING
+            this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
 
+            Element elASIN = elProduct.select("[data-asin]").first();
             result = elASIN.attr("data-asin");
         }
 
@@ -97,22 +86,19 @@ public class Scraper {
             Element elPrice = elProduct.select("span.a-size-base").first();
             String price = elPrice.text();
             result.put("price", price);
-
-//            Element elRating = elProduct.select("span.a-icon-alt").last(); // GRAB WITH ASIN IN ENGLISH
-//            String rating = elRating.text().replace(" out of 5", "").replace(" stars", "");
-//            result.put("rating", rating);
         }
         return result;
     }
 
     public void getAllCountriesPrices() throws IOException {
         String ASIN = getProductASIN();
-
-        // not working:, ".cn", ".nl", ".in"
         String[] domains = {".co.uk", ".com", ".de", ".fr", ".it"
                             , ".es", ".co.jp", ".com.mx", ".com.br"
-                            , ".ca"};
+                            , ".ca"}; // not working:, ".cn", ".nl", ".in"
 
+
+        System.out.println("ASIN: " + ASIN);
+        System.out.println("rating: " + this.rating);
         if(ASIN != null) {
             for (int i = 0; i < domains.length; i++) {
                 System.out.println(domains[i]);
