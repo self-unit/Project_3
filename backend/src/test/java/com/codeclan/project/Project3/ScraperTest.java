@@ -1,10 +1,5 @@
 package com.codeclan.project.Project3;
 
-import com.codeclan.project.Project3.models.Scraper;
-import org.junit.Test;
-
-import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 
 
