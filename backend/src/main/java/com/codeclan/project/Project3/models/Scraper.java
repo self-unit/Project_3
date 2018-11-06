@@ -8,12 +8,25 @@ import java.util.HashMap;
 
 public class Scraper {
     private String productName;
-    private int resultIndex;
     private String ASIN;
+    private int rating;
 
     public Scraper(String productName) {
-        this.productName = productName;
+        this.productName = productName.replace(" ", "%20");
         this.ASIN = null;
+//        this.rating = null;
+    }
+
+    public boolean hasBadKeyword(String text) {
+        String[] blacklist = {"did not match any products", "Nous avons trouvé", "Foram encontrados",
+                                "Ihre Suche nach", "Votre recherche", "La ricerca", "La búsqueda",
+                                "の検索に", "Nenhum produto"};
+        for (int i = 0; i < blacklist.length; i++) {
+            if(text.contains(blacklist[i])){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void getASIN() throws IOException {
@@ -21,13 +34,16 @@ public class Scraper {
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-        if(!html.contains("did not match any products")) {
+//        System.out.println(searchPage);
+//        System.out.println(doc);
+
+        if(!hasBadKeyword(doc.html())) {
             int iResult = 0;
             boolean found = false;
+
             while (found == false) {
                 Element curProduct = doc.select("#result_" + iResult).first();
                 if (!curProduct.html().contains("sponsored")) {
-                    this.resultIndex = iResult;
                     found = true;
                 } else {
                     iResult++;
@@ -48,40 +64,43 @@ public class Scraper {
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-        Element elProduct = doc.select("#result_" + this.resultIndex).first();
+        System.out.println(doc.html());
+        System.out.println(searchPage);
 
-        Element elName = elProduct.select("h2").first();
-        String name = elName.text();
-        result.put("name", name);
+        if(!hasBadKeyword(doc.html())) {
+            Element elProduct = doc.select("#result_0").first();
 
-        Element elImg = elProduct.select("img").first();
-        String image = elImg.absUrl("src");
-        result.put("image", image);
+            Element elName = elProduct.select("h2").first();
+            String name = elName.text();
+            result.put("name", name);
 
-        Element elURL = elProduct.select("a").first();
-        String URL = elURL.attr("href");
-        result.put("url", URL);
+            Element elImg = elProduct.select("img").first();
+            String image = elImg.absUrl("src");
+            result.put("image", image);
 
-        Element elPrice = elProduct.select("span.a-size-base").first();
-        String price = elPrice.text();
-        result.put("price", price);
+            Element elURL = elProduct.select("a").first();
+            String URL = elURL.attr("href");
+            result.put("url", URL);
 
-        Element elRating = elProduct.select("span.a-icon-alt").last(); // NEEDS REFACTORED FOR DIFFERENT LANGUAGES
-        String rating = elRating.text().replace(" out of 5", "").replace(" stars", "");
-        result.put("rating", rating);
+            Element elPrice = elProduct.select("span.a-size-base").first();
+            String price = elPrice.text();
+            result.put("price", price);
 
+//            Element elRating = elProduct.select("span.a-icon-alt").last(); // GRAB WITH ASIN IN ENGLISH
+//            String rating = elRating.text().replace(" out of 5", "").replace(" stars", "");
+//            result.put("rating", rating);
+        }
         return result;
     }
 
     public void getAllCountriesPrices() throws IOException {
 
         // not working:, ".cn", ".nl", ".in"
-        // , ".com" (temporamental)
 
-        String[] domains = {".nl", ".co.uk", ".de", ".fr",
+        String[] domains = {".co.uk", ".com", ".de", ".fr",
                 ".it", ".es", ".co.jp", ".com.mx", ".com.br", ".ca"};
 
-        for (int i = 0; i < domains.length - 1; i++) {
+        for (int i = 0; i < domains.length; i++) {
             System.out.println(domains[i]);
             System.out.println(getInfo(domains[i]));
         }
