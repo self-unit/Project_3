@@ -11,15 +11,22 @@ class Main extends Component {
         this.state = {
             text: '',
             currency: '',
-            results: []
+            results: [{
+              productName: "Call of Duty: Black Ops 4 (PS4)",
+              image: "https://images-eu.ssl-images-amazon.com/images/I/51dKoETIm1L._AC_US436_FMwebp_QL65_.jpg",
+              rating: 3.3,
+              highPrice: "£46.75",
+              lowPrice: "$36.75",
+              countryList: [
+                { country: "UK", price: "£46.75", url: "http://amazon.co.uk/url2buy" },
+                { country: "USA", price: "$56.75", url: "http://amazon.com/url2buy" }
+            ]
+          }]
         }
+
         this.handleInput = this.handleInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    getInfo = () => {
-        //fetch request
     }
 
     handleInput(event) {
@@ -32,15 +39,26 @@ class Main extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('form submitted');
+
         const text = this.state.text;
         const currency = this.state.currency;
-
+        if (!text || !currency) {
+          return
+        }
         console.log('text:', text);
         console.log('currency:', currency);
+        console.log('form submitted');
+
+        fetch('https://localhost/search')
+          .then( (response) => {
+            return response.json();
+          })
+          .then( (jsonData) =>{
+            this.setState({results: jsonData})
+          });
 
         //reset form
-        this.setState({ text: '', currency: '' })
+        this.setState({ text: '' })
     }
 
     render() {

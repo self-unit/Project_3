@@ -1,10 +1,10 @@
 import React from 'react';
 
-
 const SearchBox = ({search, currency, handleSubmit, handleChange, handleInput}) => {
 
     return (
         <div>
+          <h1>Compare your favourite products</h1>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -30,7 +30,7 @@ const SearchBox = ({search, currency, handleSubmit, handleChange, handleInput}) 
             </form>
         </div>
     )
-    
+
 }
 
 export default SearchBox;
