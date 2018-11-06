@@ -1,4 +1,4 @@
-package com.codeclan.project.Project3.resources;
+package com.codeclan.project.Project3.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,11 +14,11 @@ public class Search extends ResourceSupport {
     private ArrayList<Country> countryList;
 
     @JsonCreator
-    public Search(@JsonProperty("product_name") String productName, @JsonProperty("image_link") String imageLink, @JsonProperty("rating") double rating, @JsonProperty("countries") ArrayList<Country> countryList) {
+    public Search(@JsonProperty("product_name") String productName, @JsonProperty("image_link") String imageLink, @JsonProperty("rating") double rating) {
         this.productName = productName;
         this.imageLink = imageLink;
         this.rating = rating;
-        this.countryList = countryList;
+        this.countryList = new ArrayList<>();
     }
 
     public String getProductName() {
@@ -49,7 +49,7 @@ public class Search extends ResourceSupport {
         return countryList;
     }
 
-    public void setCountryList(ArrayList<Country> countryList) {
-        this.countryList = countryList;
+    public void addCountry(Country country) {
+        this.countryList.add(country);
     }
 }
