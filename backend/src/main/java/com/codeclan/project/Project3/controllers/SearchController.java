@@ -1,28 +1,22 @@
 package com.codeclan.project.Project3.controllers;
 
-import com.codeclan.project.Project3.models.Search;
+import com.codeclan.project.Project3.resources.Search;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
+@RequestMapping(value = "/search")
 public class SearchController {
 
-    private static final String TEMPLATE = "You searched for, %s!";
-
-    @RequestMapping("/search")
-    public HttpEntity<Search> search(
-            @RequestParam(value = "item", required=false, defaultValue = "Word") String item) {
-
-        Search search = new Search(String.format(TEMPLATE, item));
-        search.add(linkTo(methodOn(SearchController.class).search(item)).withSelfRel());
-
-        return new ResponseEntity<>(search, HttpStatus.OK);
+    @RequestMapping(value = "/{item}", method = RequestMethod.GET)
+    public Search getPricesForItem(@PathVariable String item) {
+        Scraper scraper = new Scraper(item)
+        return scraper.getAllCountriesPrices();
     }
 }
