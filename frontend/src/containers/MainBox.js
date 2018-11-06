@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import SearchBox from './SearchBox';
 import Results from './ResultBox';
 import LoadingBox from './LoadingBox';
@@ -11,20 +11,22 @@ class Main extends Component {
         this.state = {
             text: '',
             currency: '',
-            results: null
+            results: null,
+            redirectPage: false
         }
 
         this.handleInput = this.handleInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRedirect = this.handleRedirect.bind(this);
     }
 
     handleInput(event) {
-        this.setState({ text: event.target.value })
+      this.setState({ text: event.target.value })
     }
 
     handleChange(event) {
-        this.setState({ currency: event.target.value })
+      this.setState({ currency: event.target.value })
     }
 
     handleSubmit(event) {
@@ -40,34 +42,44 @@ class Main extends Component {
         console.log('form submitted');
         fetch(`/search/${text}`)
 
-          .then( (response) => {
-            return response.json();
-          })
-          .then( (jsonData) =>{
-            this.setState({results: jsonData})
-          });
+          .then( (response) => response.json())
+          .then( (jsonData) => this.setState({results: jsonData}))
+          .then(() => this.setState({redirectPage: true}))
+
 
         //reset form
         this.setState({ text: '' })
     }
 
-    handleResultSubmit(newResult) {
-      newResult.id = Date.now();
-      const updatedResults= [this.state.results, newResult];
-      this.setState({results: updatedResults})
+    handleRedirect() {
+      if (this.state.redirectPage) {
+          return <Redirect to='/results'/>
+      }
     }
+
+    // handleResultSubmit(newResult) {
+    //   newResult.id = Date.now();
+    //   const updatedResults= [this.state.results, newResult];
+    //   this.setState({results: updatedResults})
+    // }
 
     render() {
         return (
+
             <Router>
+              <Switch>
                 <React.Fragment>
                     <Route exact path="/"
                         render={() => <SearchBox handleInput={this.handleInput} handleChange={this.handleChange} handleSubmit={this.handleSubmit} search={this.state.text} currency={this.state.currency} />}
                     />
+
                     <Route path="/results" render={() => <Results results={this.state.results} />} />
                     <Route path="/loading" component={LoadingBox} />
+                     {this.handleRedirect()}
                 </React.Fragment>
+              </Switch>
             </Router>
+
         )
     }
 }
