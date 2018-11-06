@@ -1,11 +1,11 @@
 package com.codeclan.project.Project3.models;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Scraper {
     private String productName;
@@ -49,7 +49,7 @@ public class Scraper {
             }
 
             Element elProduct = doc.select("#result_" + iResult).first();
-            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPERATE? - COULD DO WITH MORE SPECIFIC TAG
+            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPARATE? - COULD DO WITH MORE SPECIFIC TAG
             this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
 
             Element elASIN = elProduct.select("[data-asin]").first();
@@ -60,13 +60,9 @@ public class Scraper {
     }
 
     public Product getInfo(String domain, String ASIN) throws IOException {
-//        HashMap<String, String> result = new HashMap<String, String>();
-
         String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN; // ASIN
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
-
-//        System.out.println(searchPage);
 
         if(!hasBadKeyword(doc.html())) {
             Element elProduct = doc.select("#result_0").first();
@@ -81,9 +77,9 @@ public class Scraper {
             String url = elURL.attr("href");
 
             Element elPrice = elProduct.select("span.a-size-base").first();
-            double price = Double.parseDouble(elPrice.text());
+            String price = elPrice.text();
 
-            Product product = new Product(name, url, image, price, this.rating);
+            Product product = new Product(domain, name, url, image, price, this.rating);
             return product;
         }
 
@@ -96,22 +92,24 @@ public class Scraper {
                             , ".es", ".co.jp", ".com.mx", ".com.br"
                             , ".ca"}; // not working:, ".cn", ".nl", ".in"
 
-        HashMap<Product, ArrayList<CountryPrices>> finalResults;
-        ArrayList<CountryPrices> countryPrices = new ArrayList<>();
         if(ASIN != null) {
             for (int i = 0; i < domains.length; i++) {
                 Product product = getInfo(domains[i], ASIN);
-//                System.out.println(domains[i]);
-                if(product != null) System.out.println(product);
+                if(product != null){
+                    System.out.println(product);
+                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    String json = ow.writeValueAsString(product);
+                    System.out.println(json);
+                }
             }
         } else {
             System.out.println("No results.");
         }
-
-
-//        Product product = new Product();
     }
 
-
+    // Return JSON from Object
+    // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    // String json = ow.writeValueAsString(product);
+    // System.out.println(json);
 }
 
