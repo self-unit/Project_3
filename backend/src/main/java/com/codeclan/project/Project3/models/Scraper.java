@@ -60,8 +60,10 @@ public class Scraper {
             Element elImg = elProduct.select("img").first();
             this.image = elImg.absUrl("src");
 
-            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPARATE? - COULD DO WITH MORE SPECIFIC TAG
-            this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
+//            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPARATE? - COULD DO WITH MORE SPECIFIC TAG
+//            this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
+
+            this.rating = 5;
 
             Element elASIN = elProduct.select("[data-asin]").first();
             this.ASIN = elASIN.attr("data-asin");
@@ -95,10 +97,9 @@ public class Scraper {
         return null;
     }
 
-    public void getAllCountriesPrices() throws IOException {
-        Search search = new Search();
-
+    public Search getAllCountriesPrices() throws IOException {
         getProductConstants();
+        Search search = new Search(this.productName, this.image, this.rating);
         String[] domains = {".co.uk", ".com", ".de", ".fr", ".it"
                             , ".es", ".co.jp", ".com.mx", ".com.br"
                             , ".ca"}; // not working:, ".cn", ".nl", ".in"
@@ -107,15 +108,17 @@ public class Scraper {
             for (int i = 0; i < domains.length; i++) {
                 Country country = getCountryInfo(domains[i], ASIN);
                 if(country != null){
-                    System.out.println(country);
-                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                    String json = ow.writeValueAsString(product);
-                    System.out.println(json);
+                    search.addCountry(country);
+//                    System.out.println(country);
+//                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//                    String json = ow.writeValueAsString(product);
+//                    System.out.println(json);
                 }
             }
         } else {
             System.out.println("No results.");
         }
+        return search;
     }
 }
 
