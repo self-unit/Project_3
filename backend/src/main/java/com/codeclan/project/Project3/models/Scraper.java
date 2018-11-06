@@ -59,8 +59,8 @@ public class Scraper {
         return result;
     }
 
-    public HashMap<String, String> getInfo(String domain, String ASIN) throws IOException {
-        HashMap<String, String> result = new HashMap<String, String>();
+    public Product getInfo(String domain, String ASIN) throws IOException {
+//        HashMap<String, String> result = new HashMap<String, String>();
 
         String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN; // ASIN
         String html = Jsoup.connect(searchPage).get().html();
@@ -73,24 +73,21 @@ public class Scraper {
 
             Element elName = elProduct.select("h2").first();
             String name = elName.text();
-            result.put("name", name);
 
             Element elImg = elProduct.select("img").first();
             String image = elImg.absUrl("src");
-            result.put("image", image);
 
             Element elURL = elProduct.select("a").first();
-            String URL = elURL.attr("href");
-            result.put("url", URL);
+            String url = elURL.attr("href");
 
             Element elPrice = elProduct.select("span.a-size-base").first();
-            String price = elPrice.text();
-            result.put("price", price);
-        } else {
-            return null;
+            double price = Double.parseDouble(elPrice.text());
+
+            Product product = new Product(name, url, image, price, this.rating);
+            return product;
         }
 
-        return result;
+        return null;
     }
 
     public void getAllCountriesPrices() throws IOException {
@@ -99,17 +96,19 @@ public class Scraper {
                             , ".es", ".co.jp", ".com.mx", ".com.br"
                             , ".ca"}; // not working:, ".cn", ".nl", ".in"
 
+        HashMap<Product, ArrayList<CountryPrices>> finalResults;
+        ArrayList<CountryPrices> countryPrices = new ArrayList<>();
         if(ASIN != null) {
             for (int i = 0; i < domains.length; i++) {
-                HashMap<String, String> info = getInfo(domains[i], ASIN);
+                Product product = getInfo(domains[i], ASIN);
 //                System.out.println(domains[i]);
-                if(info != null) System.out.println(info);
+                if(product != null) System.out.println(product);
             }
         } else {
             System.out.println("No results.");
         }
 
-        HashMap<Product, ArrayList<CountryPrices>> finalResults;
+
 //        Product product = new Product();
     }
 
