@@ -48,8 +48,8 @@ class Main extends Component {
         console.log('text:', text);
         console.log('currency:', currency);
         console.log('form submitted');
+        fetch(`https://localhost:8080/search/${text}`)
 
-        fetch('https://localhost/search')
           .then( (response) => {
             return response.json();
           })
