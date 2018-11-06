@@ -11,8 +11,7 @@ public class Project3Application {
 
 	public static void main(String[] args) throws IOException {
 //		SpringApplication.run(Project3Application.class, args);
-		Scraper scraper = new Scraper("sagedagsfdd");
-		scraper.getASIN();
+		Scraper scraper = new Scraper("playstation 4 console");
 		scraper.getAllCountriesPrices();
 	}
 }

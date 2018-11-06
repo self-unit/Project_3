@@ -13,8 +13,19 @@ public class Scraper {
 
     public Scraper(String productName) {
         this.productName = productName.replace(" ", "%20");
-        this.ASIN = null;
-//        this.rating = null;
+        this.rating = 0;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getASIN() {
+        return ASIN;
+    }
+
+    public int getRating() {
+        return rating;
     }
 
     public boolean hasBadKeyword(String text) {
@@ -29,13 +40,12 @@ public class Scraper {
         return false;
     }
 
-    public void getASIN() throws IOException {
+    public String getProductASIN() throws IOException {
+        String result = null;
+
         String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.productName;
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
-
-//        System.out.println(searchPage);
-//        System.out.println(doc);
 
         if(!hasBadKeyword(doc.html())) {
             int iResult = 0;
@@ -53,18 +63,20 @@ public class Scraper {
             Element product = doc.select("#result_" + iResult).first();
             Element elASIN = product.select("[data-asin]").first();
 
-            this.ASIN = elASIN.attr("data-asin");
+            result = elASIN.attr("data-asin");
         }
+
+        return result;
     }
 
-    public HashMap<String, String> getInfo(String domain) throws IOException {
+    public HashMap<String, String> getInfo(String domain, String ASIN) throws IOException {
         HashMap<String, String> result = new HashMap<String, String>();
 
-        String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + this.productName; // ASIN
+        String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN; // ASIN
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-        System.out.println(doc.html());
+
         System.out.println(searchPage);
 
         if(!hasBadKeyword(doc.html())) {
@@ -94,15 +106,20 @@ public class Scraper {
     }
 
     public void getAllCountriesPrices() throws IOException {
+        String ASIN = getProductASIN();
 
         // not working:, ".cn", ".nl", ".in"
+        String[] domains = {".co.uk", ".com", ".de", ".fr", ".it"
+                            , ".es", ".co.jp", ".com.mx", ".com.br"
+                            , ".ca"};
 
-        String[] domains = {".co.uk", ".com", ".de", ".fr",
-                ".it", ".es", ".co.jp", ".com.mx", ".com.br", ".ca"};
-
-        for (int i = 0; i < domains.length; i++) {
-            System.out.println(domains[i]);
-            System.out.println(getInfo(domains[i]));
+        if(ASIN != null) {
+            for (int i = 0; i < domains.length; i++) {
+                System.out.println(domains[i]);
+                System.out.println(getInfo(domains[i], ASIN));
+            }
+        } else {
+            System.out.println("No results.");
         }
     }
 
