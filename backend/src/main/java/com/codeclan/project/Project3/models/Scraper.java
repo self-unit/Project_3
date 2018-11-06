@@ -51,7 +51,6 @@ public class Scraper {
             }
 
             Element elProduct = doc.select("#result_" + iResult).first();
-            System.out.println(elProduct);
 
             Element elName = elProduct.select("h2").first();
             this.productName = elName.text();
@@ -73,6 +72,7 @@ public class Scraper {
         try { // Catches: "Remote host terminated the handshake" error
             html = Jsoup.connect(searchPage).get().html();
         } catch (IOException e) {
+            System.out.println("DOMAIN: " + domain + ", ERROR CAUGHT: " + e.getMessage());
             return null;
         }
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
@@ -85,10 +85,6 @@ public class Scraper {
 
             Element elPrice = elProduct.select("span.a-size-base").first();
             String price = elPrice.text();
-
-            System.out.println(domain);
-            System.out.println(url);
-            System.out.println(price);
 
             Country country = new Country(domain, price, url);
             return country;
