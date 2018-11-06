@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Scraper {
@@ -48,7 +49,7 @@ public class Scraper {
             }
 
             Element elProduct = doc.select("#result_" + iResult).first();
-            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPERATE?
+            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPERATE? - COULD DO WITH MORE SPECIFIC TAG
             this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
 
             Element elASIN = elProduct.select("[data-asin]").first();
@@ -65,7 +66,7 @@ public class Scraper {
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
-        System.out.println(searchPage);
+//        System.out.println(searchPage);
 
         if(!hasBadKeyword(doc.html())) {
             Element elProduct = doc.select("#result_0").first();
@@ -85,7 +86,10 @@ public class Scraper {
             Element elPrice = elProduct.select("span.a-size-base").first();
             String price = elPrice.text();
             result.put("price", price);
+        } else {
+            return null;
         }
+
         return result;
     }
 
@@ -95,16 +99,18 @@ public class Scraper {
                             , ".es", ".co.jp", ".com.mx", ".com.br"
                             , ".ca"}; // not working:, ".cn", ".nl", ".in"
 
-        System.out.println("ASIN: " + ASIN);
-        System.out.println("rating: " + this.rating);
         if(ASIN != null) {
             for (int i = 0; i < domains.length; i++) {
-                System.out.println(domains[i]);
-                System.out.println(getInfo(domains[i], ASIN));
+                HashMap<String, String> info = getInfo(domains[i], ASIN);
+//                System.out.println(domains[i]);
+                if(info != null) System.out.println(info);
             }
         } else {
             System.out.println("No results.");
         }
+
+        HashMap<Product, ArrayList<CountryPrices>> finalResults;
+//        Product product = new Product();
     }
 
 
