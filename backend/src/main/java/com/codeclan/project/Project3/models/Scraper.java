@@ -8,11 +8,17 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 
 public class Scraper {
+    private String searchName;
     private String productName;
+    private String image;
+    private String ASIN;
     private double rating;
 
-    public Scraper(String productName) {
-        this.productName = productName.replace(" ", "%20");
+    public Scraper(String searchName) {
+        this.searchName = searchName.replace(" ", "%20");
+        this.productName = null;
+        this.image = null;
+        this.ASIN = null;
         this.rating = 0;
     }
 
@@ -28,10 +34,8 @@ public class Scraper {
         return false;
     }
 
-    public String getProductASIN() throws IOException {
-        String result = null;
-
-        String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.productName; // Add a check for null, try .com instead
+    public void getProductConstants() throws IOException {
+        String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.searchName; // Add a check for null, try .com instead
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
@@ -49,17 +53,22 @@ public class Scraper {
             }
 
             Element elProduct = doc.select("#result_" + iResult).first();
+
+            Element elName = elProduct.select("h2").first();
+            this.productName = elName.text();
+
+            Element elImg = elProduct.select("img").first();
+            this.image = elImg.absUrl("src");
+
             Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPARATE? - COULD DO WITH MORE SPECIFIC TAG
             this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
 
             Element elASIN = elProduct.select("[data-asin]").first();
-            result = elASIN.attr("data-asin");
+            this.ASIN = elASIN.attr("data-asin");
         }
-
-        return result;
     }
 
-    public Product getInfo(String domain, String ASIN) throws IOException {
+    public Country getCountryInfo(String domain, String ASIN) throws IOException {
         String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN; // ASIN
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
@@ -67,11 +76,11 @@ public class Scraper {
         if(!hasBadKeyword(doc.html())) {
             Element elProduct = doc.select("#result_0").first();
 
-            Element elName = elProduct.select("h2").first();
-            String name = elName.text();
-
-            Element elImg = elProduct.select("img").first();
-            String image = elImg.absUrl("src");
+//            Element elName = elProduct.select("h2").first();
+//            String name = elName.text();
+//
+//            Element elImg = elProduct.select("img").first();
+//            String image = elImg.absUrl("src");
 
             Element elURL = elProduct.select("a").first();
             String url = elURL.attr("href");
@@ -79,24 +88,25 @@ public class Scraper {
             Element elPrice = elProduct.select("span.a-size-base").first();
             String price = elPrice.text();
 
-            Product product = new Product(domain, name, url, image, price, this.rating);
-            return product;
+            return Country country = new Country(domain, price, url);
         }
 
         return null;
     }
 
     public void getAllCountriesPrices() throws IOException {
-        String ASIN = getProductASIN();
+        Search search = new Search();
+
+        getProductConstants();
         String[] domains = {".co.uk", ".com", ".de", ".fr", ".it"
                             , ".es", ".co.jp", ".com.mx", ".com.br"
                             , ".ca"}; // not working:, ".cn", ".nl", ".in"
 
         if(ASIN != null) {
             for (int i = 0; i < domains.length; i++) {
-                Product product = getInfo(domains[i], ASIN);
-                if(product != null){
-                    System.out.println(product);
+                Country country = getCountryInfo(domains[i], ASIN);
+                if(country != null){
+                    System.out.println(country);
                     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                     String json = ow.writeValueAsString(product);
                     System.out.println(json);
@@ -106,10 +116,5 @@ public class Scraper {
             System.out.println("No results.");
         }
     }
-
-    // Return JSON from Object
-    // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    // String json = ow.writeValueAsString(product);
-    // System.out.println(json);
 }
 
