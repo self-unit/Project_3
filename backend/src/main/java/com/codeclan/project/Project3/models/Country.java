@@ -7,11 +7,11 @@ import org.springframework.hateoas.ResourceSupport;
 public class Country extends ResourceSupport {
 
     private String countryCode;
-    private double price;
+    private String price;
     private String link;
 
     @JsonCreator
-    public Country(@JsonProperty("country_code") String countryCode, @JsonProperty("price") double price, @JsonProperty("link") String link) {
+    public Country(@JsonProperty("country_code") String countryCode, @JsonProperty("price") String price, @JsonProperty("link") String link) {
         this.countryCode = countryCode;
         this.price = price;
         this.link = link;
@@ -25,11 +25,11 @@ public class Country extends ResourceSupport {
         this.countryCode = countryCode;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
