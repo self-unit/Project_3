@@ -12,7 +12,8 @@ class Main extends Component {
             text: '',
             currency: '',
             results: null,
-            redirectPage: false
+            redirectPage: null
+
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -31,7 +32,7 @@ class Main extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-
+        this.setState({redirectPage: 'loading'});
         const text = this.state.text;
         const currency = this.state.currency;
         if (!text || !currency) {
@@ -44,7 +45,7 @@ class Main extends Component {
 
           .then( (response) => response.json())
           .then( (jsonData) => this.setState({results: jsonData}))
-          .then(() => this.setState({redirectPage: true}))
+          .then(() => this.setState({redirectPage: 'results'}))
 
 
         //reset form
@@ -52,9 +53,11 @@ class Main extends Component {
     }
 
     handleRedirect() {
-      if (this.state.redirectPage) {
+      if (this.state.redirectPage === 'results') {
           return <Redirect to='/results'/>
-      }
+      } else if (this.state.redirectPage === 'loading') {
+        return <Redirect to='/loading' />
+      } else {}
     }
 
     // handleResultSubmit(newResult) {
