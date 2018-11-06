@@ -48,7 +48,7 @@ public class Scraper {
             }
 
             Element elProduct = doc.select("#result_" + iResult).first();
-            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING
+            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPERATE?
             this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
 
             Element elASIN = elProduct.select("[data-asin]").first();
@@ -64,7 +64,6 @@ public class Scraper {
         String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN; // ASIN
         String html = Jsoup.connect(searchPage).get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
-
 
         System.out.println(searchPage);
 
@@ -95,7 +94,6 @@ public class Scraper {
         String[] domains = {".co.uk", ".com", ".de", ".fr", ".it"
                             , ".es", ".co.jp", ".com.mx", ".com.br"
                             , ".ca"}; // not working:, ".cn", ".nl", ".in"
-
 
         System.out.println("ASIN: " + ASIN);
         System.out.println("rating: " + this.rating);
