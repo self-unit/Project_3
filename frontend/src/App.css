@@ -15,7 +15,7 @@
 
 .loadingbox {
   display: block;
-  padding-top: 300px;
+  padding-top: 200px;
   padding-left: 200px;
   margin: auto;
   flex-wrap: wrap;
@@ -23,6 +23,27 @@
   justify-content: center;
   width: 50%;
   height: 100%;
+}
+
+.loadingLogo{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+}
+
+.resultPage{
+  margin-top: 2%;
+  margin-left: 10%;
+  margin-right: 10%;
+  display: grid;
+}
+
+.searchbox{
+  margin-top: 15%;
+  margin-left: 30%;
+  display: grid;
 }
 
 a.button {
