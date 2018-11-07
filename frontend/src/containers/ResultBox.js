@@ -1,8 +1,9 @@
 import React from 'react';
 import SearchBox from './SearchBox';
 import ResultList from '../components/ResultList';
+import ProductInfo from '../components/ProductInfo';
 
-const Results = ({results}) => {
+const ResultBox = ({results, currency}) => {
 
   for (var key in results) {
     if (results.hasOwnProperty(key)) {
@@ -12,15 +13,13 @@ const Results = ({results}) => {
 
   return (
     <div className='resultPage'>
-        <h1>Result Box</h1>
-        
         <div className='productInfo'>
-            <h4>Product Info Box</h4>
-
+            <h4>Product details</h4>
+            <ProductInfo results={results} currency={currency}/>
         </div>
         <div className='resultList'>
-            <h4>Result List:</h4>
-            <ResultList />
+            <h4>International results</h4>
+            <ResultList countryList={results.countryList} currency={currency}/>
         </div>
 
         {/* <div className='productSuggetion'>
@@ -30,4 +29,4 @@ const Results = ({results}) => {
   )
 };
 
-export default Results;
+export default ResultBox;
