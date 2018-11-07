@@ -13,10 +13,7 @@ const Results = ({results}) => {
   return (
     <div className='resultPage'>
         <h1>Result Box</h1>
-        <div className="productSearch">
-            <h4>Search products: </h4>
-            <SearchBox />
-        </div>
+        
         <div className='productInfo'>
             <h4>Product Info Box</h4>
 

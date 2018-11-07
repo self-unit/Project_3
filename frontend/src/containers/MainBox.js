@@ -75,10 +75,10 @@ class Main extends Component {
                     <Route exact path="/"
                         render={() => <SearchBox handleInput={this.handleInput} handleChange={this.handleChange} handleSubmit={this.handleSubmit} search={this.state.text} currency={this.state.currency} />}
                     />
-
+{this.handleRedirect()}
                     <Route path="/results" render={() => <Results results={this.state.results} />} />
                     <Route path="/loading" component={LoadingBox} />
-                     {this.handleRedirect()}
+
                 </React.Fragment>
               </Switch>
             </Router>

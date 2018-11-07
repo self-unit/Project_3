@@ -14,10 +14,13 @@
 }
 
 .loadingbox {
-  display: flex;
+  display: block;
+  padding-top: 300px;
+  padding-left: 200px;
+  margin: auto;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
+  width: 50%;
+  height: 100%;
 }
