@@ -1,11 +1,11 @@
 import React from 'react';
 import ListItem from './ListItem';
 
-const ResultList = ({countryList}) => {
+const ResultList = ({countryList, currency, newPrice}) => {
 
 
   const CountryList = countryList.map((data, id) =>
-    <ListItem key={id} countryCode={data.countryCode} link={data.link} originalPrice={data.price}/>
+    <ListItem key={id} countryCode={data.countryCode} link={data.link} originalPrice={data.price} convertCurrency={currency} />
 )
 
 
@@ -16,7 +16,7 @@ const ResultList = ({countryList}) => {
           <tr>
             <th>Country |</th>
             <th>Price in local currency |</th>
-            {/* <th>Converted Price |</th> */}
+            <th>Converted Price |</th>
             <th>Buy</th>
           </tr>
         </thead>

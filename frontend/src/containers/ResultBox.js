@@ -3,7 +3,7 @@ import SearchBox from './SearchBox';
 import ResultList from '../components/ResultList';
 import ProductInfo from '../components/ProductInfo';
 
-const ResultBox = ({results, currency}) => {
+const ResultBox = ({results, currency, newPrice}) => {
 
   for (var key in results) {
     if (results.hasOwnProperty(key)) {
@@ -19,7 +19,7 @@ const ResultBox = ({results, currency}) => {
         </div>
         <div className='resultList'>
             <h4>International results</h4>
-            <ResultList countryList={results.countryList} currency={currency}/>
+            <ResultList countryList={results.countryList} currency={currency} newPrice={newPrice} />
         </div>
 
         {/* <div className='productSuggetion'>

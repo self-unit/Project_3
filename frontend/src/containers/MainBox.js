@@ -13,7 +13,6 @@ class Main extends Component {
             currency: '',
             results: {countryList: [{countryCode: null, link: null, price: null}], imageLink: null, productName: null, rating: null},
             redirectPage: null
-
         }
 
         this.handleInput = this.handleInput.bind(this);
@@ -44,8 +43,8 @@ class Main extends Component {
         fetch(`/search/${text}`)
 
           .then( (response) => response.json())
-          .then( (jsonData) => this.setState({results: jsonData}))
-          .then(() => this.setState({redirectPage: 'results'}))
+          .then( (jsonData) => this.setState({results: jsonData, redirectPage: 'results'}))
+        //   .then(() => this.setState({redirectPage: 'results'}))
 
         console.log(this.state.results)
         //reset form

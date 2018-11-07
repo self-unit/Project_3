@@ -9,13 +9,13 @@
 // .com.br - BRL
 // .ca - CAD
 
-// import React from 'react';
-const fetch = require('node-fetch');
+import React from 'react';
+// const fetch = require('node-fetch');
 
 const CurrencyHelper = function () {
 }
 
-CurrencyHelper.prototype.convert = async (domain, convertTo, price) => {
+CurrencyHelper.prototype.convert = (domain, convertTo, price) => {
   const domainCurrencies = {
     ".co.uk": "GBP",
     ".com": "USD",
@@ -29,14 +29,16 @@ CurrencyHelper.prototype.convert = async (domain, convertTo, price) => {
     ".ca": "CAD"
   }
 
-  // return fetch(url)
-  //   .then((response) => response.json());
   const url = `https://free.currencyconverterapi.com/api/v6/convert?q=${domainCurrencies[domain]}_${convertTo}&compact=ultra`
-  const response = await fetch(url);
-  const json = await response.json();
-  const currencyRating = json[Object.keys(json)[0]];
+  
+  return fetch(url)
+    .then((response) => response.json())
+    .then((resultObject) => resultObject[Object.keys(resultObject)[0]] * price)
+  // // const response = await fetch(url);
+  // // const json = await response.json();
+  // const currencyRating = json[Object.keys(json)[0]];
 
-  return currencyRating * price;
+  // return currencyRating * price;
 }
 
-module.exports = CurrencyHelper;
+export default CurrencyHelper;
