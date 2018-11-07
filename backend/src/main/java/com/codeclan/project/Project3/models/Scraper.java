@@ -71,6 +71,11 @@ public class Scraper {
     }
 
     public Country getCountryInfo(String domain, String ASIN) {
+        // https://www.amazon.co.uk/gp/aws/cart/add.html?AssociateTag=your-tag-here-20&ASIN.1=B07HKJQSGR&Quantity.1=1 [URL, AssociateTAG + ASIN]
+        // <td>PlayStation 4 (500GB) Console and Red Dead Redemption 2 Bundle</td> [NAME]
+        // <td class="price">£249.99</td> [PRICE]
+        // There are no items to add to your cart. [FAIL PAGE]
+
         String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN;
         String html = null;
         try { // Catches: "Remote host terminated the handshake" error
