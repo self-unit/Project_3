@@ -1,7 +1,5 @@
 package com.codeclan.project.Project3.models;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
@@ -45,7 +43,7 @@ public class Scraper {
 
             while (found == false) {
                 Element curProduct = doc.select("#result_" + iResult).first();
-                if (!curProduct.html().contains("sponsored")) {
+                if (!curProduct.html().contains("sponsored") && !curProduct.html().contains("Our Brand")) {
                     found = true;
                 } else {
                     iResult++;
@@ -60,29 +58,27 @@ public class Scraper {
             Element elImg = elProduct.select("img").first();
             this.image = elImg.absUrl("src");
 
-//            Element elRating = elProduct.select("span.a-icon-alt").first(); // GET RATING, NEED TO SEPARATE? - COULD DO WITH MORE SPECIFIC TAG
-//            this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
-
-            this.rating = 5;
+            Element elRating = elProduct.select("i.a-icon-star").first();
+            this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
 
             Element elASIN = elProduct.select("[data-asin]").first();
             this.ASIN = elASIN.attr("data-asin");
         }
     }
 
-    public Country getCountryInfo(String domain, String ASIN) throws IOException {
-        String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN; // ASIN
-        String html = Jsoup.connect(searchPage).get().html();
+    public Country getCountryInfo(String domain, String ASIN) {
+        String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN;
+        String html = null;
+        try { // Catches: "Remote host terminated the handshake" error
+            html = Jsoup.connect(searchPage).get().html();
+        } catch (IOException e) {
+            System.out.println("DOMAIN: " + domain + ", ERROR CAUGHT: " + e.getMessage());
+            return null;
+        }
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
         if(!hasBadKeyword(doc.html())) {
             Element elProduct = doc.select("#result_0").first();
-
-//            Element elName = elProduct.select("h2").first();
-//            String name = elName.text();
-//
-//            Element elImg = elProduct.select("img").first();
-//            String image = elImg.absUrl("src");
 
             Element elURL = elProduct.select("a").first();
             String url = elURL.attr("href");
@@ -109,10 +105,6 @@ public class Scraper {
                 Country country = getCountryInfo(domains[i], ASIN);
                 if(country != null){
                     search.addCountry(country);
-//                    System.out.println(country);
-//                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//                    String json = ow.writeValueAsString(product);
-//                    System.out.println(json);
                 }
             }
         } else {
