@@ -2,6 +2,7 @@ import React from 'react';
 import SearchBox from './SearchBox';
 import ResultList from '../components/ResultList';
 import ProductInfo from '../components/ProductInfo';
+import NavBar from '../components/NavBar';
 
 const ResultBox = ({results, currency}) => {
 
@@ -13,6 +14,7 @@ const ResultBox = ({results, currency}) => {
 
   return (
     <div className='resultPage'>
+        <NavBar />
         <div className='productInfo'>
             <h4>Product details</h4>
             <ProductInfo results={results} currency={currency}/>
