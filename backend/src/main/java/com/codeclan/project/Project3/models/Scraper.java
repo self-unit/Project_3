@@ -2,6 +2,7 @@ package com.codeclan.project.Project3.models;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
@@ -22,8 +23,8 @@ public class Scraper {
 
     public boolean hasBadKeyword(String text) {
         String[] blacklist = {"did not match any products", "Nous avons trouvé", "Foram encontrados",
-                                "Ihre Suche nach", "Votre recherche", "La ricerca", "La búsqueda",
-                                "の検索に", "Nenhum produto"};
+                "Ihre Suche nach", "Votre recherche", "La ricerca", "La búsqueda",
+                "の検索に", "Nenhum produto"};
         for (int i = 0; i < blacklist.length; i++) {
             if(text.contains(blacklist[i])){
                 return true;
@@ -71,43 +72,39 @@ public class Scraper {
     }
 
     public Country getCountryInfo(String domain, String ASIN) {
-        // https://www.amazon.co.uk/gp/aws/cart/add.html?AssociateTag=your-tag-here-20&ASIN.1=B07HKJQSGR&Quantity.1=1 [URL, AssociateTAG + ASIN]
-        // <td>PlayStation 4 (500GB) Console and Red Dead Redemption 2 Bundle</td> [NAME]
-        // <td class="price">£249.99</td> [PRICE]
-        // There are no items to add to your cart. [FAIL PAGE]
-
-        String searchPage = "https://www.amazon" + domain + "/s/field-keywords=" + ASIN;
+        String searchPage = "https://www.amazon" + domain + "/gp/aws/cart/add.html?AssociateTag=your-tag-here&ASIN.1=" + ASIN + "&Quantity.1=1";
         String html = null;
+
         try { // Catches: "Remote host terminated the handshake" error
             html = Jsoup.connect(searchPage).get().html();
         } catch (IOException e) {
             System.out.println("DOMAIN: " + domain + ", ERROR CAUGHT: " + e.getMessage());
             return null;
         }
+
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
+        String price = null;
 
-        if(!hasBadKeyword(doc.html())) {
-            Element elProduct = doc.select("#result_0").first();
+        try {
+            Elements elPrice = doc.select("td");
+            Element e = elPrice.get(4);
 
-            Element elURL = elProduct.select("a").first();
-            String url = elURL.attr("href");
-
-            Element elPrice = elProduct.select("span.a-size-base").first();
-            String price = elPrice.text();
-
-            Country country = new Country(domain, price, url);
-            return country;
+            price = e.text();
+        } catch (Exception e) {
+            System.out.println("URL: " + searchPage + ", ERROR: " + e.getMessage());
+            return null;
         }
 
-        return null;
+        Country country = new Country(domain, price, searchPage);
+        return country;
     }
 
     public Search getAllCountriesPrices() throws IOException {
         getProductConstants();
         Search search = new Search(this.productName, this.image, this.rating);
         String[] domains = {".co.uk", ".com", ".de", ".fr", ".it"
-                            , ".es", ".co.jp", ".com.mx", ".com.br"
-                            , ".ca"}; // not working:, ".cn", ".nl", ".in"
+                , ".es", ".co.jp", ".com.mx", ".com.br"
+                , ".ca"}; // not working:, ".cn", ".nl", ".in"
 
         if(ASIN != null) {
             for (int i = 0; i < domains.length; i++) {
