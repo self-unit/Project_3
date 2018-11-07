@@ -49,7 +49,7 @@ class Main extends Component {
 
         console.log(this.state.results)
         //reset form
-        this.setState({ text: '' })
+        this.setState({ text: '' , currency: ''})
     }
 
     handleRedirect() {

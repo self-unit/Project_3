@@ -32,7 +32,7 @@ const ListItem = ({countryCode, link, originalPrice}) => {
             break;
         case ".com.br":
             countryCode = "Brazil"
-            break; 
+            break;
     }
 
     return(
@@ -40,7 +40,7 @@ const ListItem = ({countryCode, link, originalPrice}) => {
             <td>{countryCode}</td>
             <td>{originalPrice}</td>
             {/* <td>{convertedPrice}</td> */}
-            <td><a href={link} target="_blank" class="button">Purchase</a></td>
+            <td><a href={link} target="_blank" class="button">Go To Listing</a></td>
         </tr>
     )
 }
