@@ -5,7 +5,7 @@ const ResultList = ({countryList}) => {
 
 
   const CountryList = countryList.map((data, id) =>
-    <ListItem key={id} countryCode={data.countryCode} link={data.link} originalPrice={data.price} convertedPrice={data.convertedPrice}/>
+    <ListItem key={id} countryCode={data.countryCode} link={data.link} originalPrice={data.price}/>
 )
 
 

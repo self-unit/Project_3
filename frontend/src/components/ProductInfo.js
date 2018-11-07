@@ -15,7 +15,7 @@ const ProductInfo = ({results}) =>{
         <div>
             <img src={img} alt="product" width="50px" height="50px" />
             <ul>
-                <h3>{name}</h3>
+                <h4>{name}</h4>
                 <li>Rating: {rating}</li>
                 {/* <li>Highest Price: {highestPrice}</li>
                 <li>Lowest Price: {lowestPrice}</li>
