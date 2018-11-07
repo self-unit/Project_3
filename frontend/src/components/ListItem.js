@@ -5,7 +5,7 @@ const ListItem = ({countryCode, link, originalPrice}) => {
     switch(countryCode){
         case ".co.uk":
             countryCode = "UK"
-        break;
+            break;
         case ".fr":
             countryCode = "France"
             break;
@@ -37,10 +37,10 @@ const ListItem = ({countryCode, link, originalPrice}) => {
 
     return(
         <tr>
-            <th>{countryCode} |</th>
-            <th>{originalPrice} |</th>
-            {/* <th>{convertedPrice} |</th> */}
-            <th><a href={link} target="_blank">Purchase</a></th>
+            <td>{countryCode}</td>
+            <td>{originalPrice}</td>
+            {/* <td>{convertedPrice}</td> */}
+            <td><a href={link} target="_blank" class="button">Purchase</a></td>
         </tr>
     )
 }

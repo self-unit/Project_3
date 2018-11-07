@@ -58,8 +58,12 @@ public class Scraper {
             Element elImg = elProduct.select("img").first();
             this.image = elImg.absUrl("src");
 
-            Element elRating = elProduct.select("i.a-icon-star").first();
-            this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
+            try {
+                Element elRating = elProduct.select("i.a-icon-star").first();
+                this.rating = Double.parseDouble(elRating.text().replace(" out of 5", "").replace(" stars", ""));
+            } catch (Exception e) {
+                this.rating = 0;
+            }
 
             Element elASIN = elProduct.select("[data-asin]").first();
             this.ASIN = elASIN.attr("data-asin");

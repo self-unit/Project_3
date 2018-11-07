@@ -4,7 +4,11 @@ const ProductInfo = ({results}) =>{
 
     const name = results.productName;
     const img = results.imageLink;
-    const rating = results.rating;
+    let rating = results.rating;
+    if (rating === 0) {
+        rating = "N/A";
+    }
+    
 //TODO: make high prices and low prices from converted price list
 
     // const highestPrice = results.countryList.map(data => )
@@ -12,11 +16,11 @@ const ProductInfo = ({results}) =>{
     // const savings = highestPrice - lowestPrice;
 
     return(
-        <div>
-            <img src={img} alt="product" width="50px" height="50px" />
+        <div className="productInfo">
+            <img src={img} alt="product" width="200px" height="200px" />
             <ul>
-                <h4>{name}</h4>
-                <li>Rating: {rating}</li>
+                <li><b>Product name:</b> {name}</li>
+                <li><b>Rating:</b> {rating}</li>
                 {/* <li>Highest Price: {highestPrice}</li>
                 <li>Lowest Price: {lowestPrice}</li>
                 <li>Savings: {savings}</li> */}

@@ -47,7 +47,7 @@ class Main extends Component {
           .then( (jsonData) => this.setState({results: jsonData}))
           .then(() => this.setState({redirectPage: 'results'}))
 
-
+        console.log(this.state.results)
         //reset form
         this.setState({ text: '' })
     }
@@ -70,7 +70,7 @@ class Main extends Component {
                         render={() => <SearchBox handleInput={this.handleInput} handleChange={this.handleChange} handleSubmit={this.handleSubmit} search={this.state.text} currency={this.state.currency} />}
                     />
 {this.handleRedirect()}
-                    <Route path="/results" render={() => <ResultBox results={this.state.results} />} />
+                    <Route path="/results" render={() => <ResultBox currency={this.state.currency} results={this.state.results} />} />
                     <Route path="/loading" component={LoadingBox} />
 
                 </React.Fragment>

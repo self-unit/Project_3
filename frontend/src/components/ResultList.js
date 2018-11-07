@@ -11,13 +11,12 @@ const ResultList = ({countryList}) => {
 
   return(
     <div>
-      <h1>Result List</h1>
       <table>
         <thead>
           <tr>
             <th>Country |</th>
             <th>Price in local currency |</th>
-            <th>Converted Price |</th>
+            {/* <th>Converted Price |</th> */}
             <th>Buy</th>
           </tr>
         </thead>
