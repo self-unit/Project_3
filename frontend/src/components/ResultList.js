@@ -1,6 +1,13 @@
 import React from 'react';
+import ListItem from './ListItem';
 
-const ResultList = () => {
+const ResultList = ({countryList}) => {
+
+
+  const CountryList = countryList.map((data, id) =>
+    <ListItem key={id} countryCode={data.countryCode} link={data.link} originalPrice={data.price} convertedPrice={data.convertedPrice}/>
+)
+
 
   return(
     <div>
@@ -9,22 +16,13 @@ const ResultList = () => {
         <thead>
           <tr>
             <th>Country |</th>
-            <th>Product Name |</th>
-            <th>Currency |</th>
-            <th>Price |</th>
-            <th>Savings |</th>
+            <th>Price in local currency |</th>
+            <th>Converted Price |</th>
             <th>Buy</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{}</td>
-            <td>{}</td>
-            <td>{3}</td>
-            <td>{4}</td>
-            <td>{5}</td>
-            <td>{6}</td>
-          </tr>
+            {CountryList}
         </tbody>
       </table>
     </div>

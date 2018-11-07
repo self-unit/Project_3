@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import SearchBox from './SearchBox';
-import Results from './ResultBox';
+import ResultBox from './ResultBox';
 import LoadingBox from './LoadingBox';
 
 class Main extends Component {
@@ -11,7 +11,7 @@ class Main extends Component {
         this.state = {
             text: '',
             currency: '',
-            results: null,
+            results: {countryList: [{countryCode: null, link: null, price: null}], imageLink: null, productName: null, rating: null},
             redirectPage: null
 
         }
@@ -60,12 +60,6 @@ class Main extends Component {
       } else {}
     }
 
-    // handleResultSubmit(newResult) {
-    //   newResult.id = Date.now();
-    //   const updatedResults= [this.state.results, newResult];
-    //   this.setState({results: updatedResults})
-    // }
-
     render() {
         return (
 
@@ -76,7 +70,7 @@ class Main extends Component {
                         render={() => <SearchBox handleInput={this.handleInput} handleChange={this.handleChange} handleSubmit={this.handleSubmit} search={this.state.text} currency={this.state.currency} />}
                     />
 {this.handleRedirect()}
-                    <Route path="/results" render={() => <Results results={this.state.results} />} />
+                    <Route path="/results" render={() => <ResultBox results={this.state.results} />} />
                     <Route path="/loading" component={LoadingBox} />
 
                 </React.Fragment>
