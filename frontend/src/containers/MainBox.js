@@ -13,9 +13,7 @@ class Main extends Component {
             currency: '',
             results: {countryList: [{countryCode: null, link: null, price: null}], imageLink: null, productName: null, rating: null},
             redirectPage: null
-
         }
-
         this.handleInput = this.handleInput.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,17 +36,14 @@ class Main extends Component {
         if (!text || !currency) {
           return
         }
-        console.log('text:', text);
-        console.log('currency:', currency);
-        console.log('form submitted');
+        // console.log('text:', text);
+        // console.log('currency:', currency);
+        // console.log('form submitted');
         fetch(`/search/${text}`)
-
           .then( (response) => response.json())
-          .then( (jsonData) => this.setState({results: jsonData}))
-          .then(() => this.setState({redirectPage: 'results'}))
-
-        console.log(this.state.results)
-        //reset form
+          .then( (jsonData) => this.setState({results: jsonData, redirectPage: 'results'}))
+          // .then(() => this.setState({redirectPage: 'results'}))
+        // console.log(this.state.results)
         this.setState({ text: '' , currency: ''})
     }
 
@@ -62,17 +57,15 @@ class Main extends Component {
 
     render() {
         return (
-
             <Router>
               <Switch>
                 <React.Fragment>
-                    <Route exact path="/"
-                        render={() => <SearchBox handleInput={this.handleInput} handleChange={this.handleChange} handleSubmit={this.handleSubmit} search={this.state.text} currency={this.state.currency} />}
-                    />
-{this.handleRedirect()}
-                    <Route path="/results" render={() => <ResultBox currency={this.state.currency} results={this.state.results} />} />
-                    <Route path="/loading" component={LoadingBox} />
-
+                  <Route exact path="/"
+                      render={() => <SearchBox handleInput={this.handleInput} handleChange={this.handleChange} handleSubmit={this.handleSubmit} search={this.state.text} currency={this.state.currency} />}
+                  />
+                  {this.handleRedirect()}
+                  <Route path="/results" render={() => <ResultBox currency={this.state.currency} results={this.state.results} />} />
+                  <Route path="/loading" component={LoadingBox} />
                 </React.Fragment>
               </Switch>
             </Router>
