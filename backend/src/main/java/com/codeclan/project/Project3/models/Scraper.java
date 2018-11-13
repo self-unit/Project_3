@@ -26,7 +26,20 @@ public class Scraper {
         this.rating = 0;
     }
 
-    public static BigDecimal convertCurrency(final String amount, final Locale locale) throws ParseException {
+    public String getConversionRates() {
+        // Number of Requests per Hour: 100 - Grab once every 1-24h?
+        // http://free.currencyconverterapi.com/api/v5/convert?q=EUR_USD&compact=y
+        // EUR_USD
+        // EUR_GBP
+        // EUR_MXN
+        // GBP_USD
+        // GBP_EUR
+        // GBP_MXN
+        // etc...
+        return null;
+    }
+
+    public BigDecimal convertCurrency(final String amount, final Locale locale) throws ParseException {
         final NumberFormat format = NumberFormat.getNumberInstance(locale);
         if (format instanceof DecimalFormat) {
             ((DecimalFormat) format).setParseBigDecimal(true);
