@@ -11,10 +11,10 @@ import java.util.Locale;
 @SpringBootApplication
 public class Project3Application {
 
-	public static void main(String[] args) throws IOException, ParseException {
-//		SpringApplication.run(Project3Application.class, args);
-		Scraper scraper = new Scraper("PS4 Controller");
-		System.out.println(scraper.convertCurrency("R$ 1.999,99", Locale.forLanguageTag("pt")));
+	public static void main(String[] args) {
+		SpringApplication.run(Project3Application.class, args);
+//		Scraper scraper = new Scraper("PS4 Controller");
+//		System.out.println(scraper.convertCurrency("R$ 1.999,99", Locale.forLanguageTag("pt"))); // Works for Brazil
 //        scraper.getAllCountriesPrices();
 	}
 }
