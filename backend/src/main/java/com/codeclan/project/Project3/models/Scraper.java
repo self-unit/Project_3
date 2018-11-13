@@ -5,6 +5,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class Scraper {
     private String searchName;
@@ -19,6 +24,14 @@ public class Scraper {
         this.image = null;
         this.ASIN = null;
         this.rating = 0;
+    }
+
+    public static BigDecimal convertCurrency(final String amount, final Locale locale) throws ParseException {
+        final NumberFormat format = NumberFormat.getNumberInstance(locale);
+        if (format instanceof DecimalFormat) {
+            ((DecimalFormat) format).setParseBigDecimal(true);
+        }
+        return (BigDecimal) format.parse(amount.replaceAll("[^\\d.,]",""));
     }
 
     public boolean hasBadKeyword(String text) {
