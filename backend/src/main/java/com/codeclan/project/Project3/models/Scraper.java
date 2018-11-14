@@ -39,12 +39,13 @@ public class Scraper {
         return null;
     }
 
-    public BigDecimal convertCurrency(final String amount, final Locale locale) throws ParseException {
+    // Country ref's: https://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
+    public float convertCurrency(final String amount, final Locale locale) throws ParseException {
         final NumberFormat format = NumberFormat.getNumberInstance(locale);
         if (format instanceof DecimalFormat) {
             ((DecimalFormat) format).setParseBigDecimal(true);
         }
-        return (BigDecimal) format.parse(amount.replaceAll("[^\\d.,]",""));
+        return (float) format.parse(amount.replaceAll("[^\\d.,]",""));
     }
 
     public boolean hasBadKeyword(String text) {
