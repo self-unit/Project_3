@@ -5,6 +5,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class Scraper {
     private String searchName;
@@ -19,6 +24,28 @@ public class Scraper {
         this.image = null;
         this.ASIN = null;
         this.rating = 0;
+    }
+
+    public String getConversionRates() {
+        // Number of Requests per Hour: 100 - Grab once every 1-24h?
+        // http://free.currencyconverterapi.com/api/v5/convert?q=EUR_USD&compact=y
+        // EUR_USD
+        // EUR_GBP
+        // EUR_MXN
+        // GBP_USD
+        // GBP_EUR
+        // GBP_MXN
+        // etc...
+        return null;
+    }
+
+    // Country ref's: https://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
+    public float convertCurrency(final String amount, final Locale locale) throws ParseException {
+        final NumberFormat format = NumberFormat.getNumberInstance(locale);
+        if (format instanceof DecimalFormat) {
+            ((DecimalFormat) format).setParseBigDecimal(true);
+        }
+        return (float) format.parse(amount.replaceAll("[^\\d.,]",""));
     }
 
     public boolean hasBadKeyword(String text) {
