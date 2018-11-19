@@ -11,7 +11,7 @@ class Main extends Component {
         this.state = {
             text: '',
             currency: '',
-            results: {countryList: [{countryCode: null, link: null, price: null}], imageLink: null, productName: null, rating: null},
+            results: null,
             redirectPage: null
         }
         this.handleInput = this.handleInput.bind(this);
