@@ -62,7 +62,13 @@ public class Scraper {
 
     public void getProductConstants() throws IOException {
         String searchPage = "https://www.amazon.co.uk/s/field-keywords=" + this.searchName; // Add a check for null, try .com instead
-        String html = Jsoup.connect(searchPage).get().html();
+        String html = Jsoup.connect(searchPage)
+                .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                .header("Accept", "image/webp,image/apng,image/*,*/*;q=0.8")
+                .header("Referer","https://www.amazon.co.uk/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=asd&rh=i%3Aaps%2Ck%3Aasd")
+                .header("Accept-Encoding","gzip, deflate, br")
+                .header("Accept-Language","en-US,en;q=0.9")
+                .get().html();
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
 
         if(!hasBadKeyword(doc.html())) {
@@ -103,7 +109,14 @@ public class Scraper {
         String html = null;
 
         try { // Catches: "Remote host terminated the handshake" error
-            html = Jsoup.connect(searchPage).get().html();
+            html = Jsoup.connect(searchPage)
+                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36")
+                    .header("Accept", "image/webp,image/apng,image/*,*/*;q=0.8")
+                    .header("Referer","https://www.amazon.co.uk/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=asd&rh=i%3Aaps%2Ck%3Aasd")
+                    .header("Accept-Encoding","gzip, deflate, br")
+                    .header("Accept-Language","en-US,en;q=0.9")
+                    .get().html();
+
         } catch (IOException e) {
             System.out.println("DOMAIN: " + domain + ", ERROR CAUGHT: " + e.getMessage());
             return null;
