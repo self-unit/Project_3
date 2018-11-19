@@ -48,7 +48,7 @@ public class Scraper {
             case ".it": return Locale.ITALY;
             case ".co.jp": return Locale.JAPAN;
             case ".ca": return Locale.CANADA;
-            case ".es": return Locale.forLanguageTag("es_ES");
+            case ".es": return Locale.ITALY; // Spain wasn't working but is also EURO so using Italy instead.
             case ".com.mx": return Locale.forLanguageTag("es_MX");
             case ".com.br": return Locale.forLanguageTag("pt");
 
