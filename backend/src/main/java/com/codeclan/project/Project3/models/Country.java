@@ -4,14 +4,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.ResourceSupport;
 
+import java.math.BigDecimal;
+
 public class Country extends ResourceSupport {
 
     private String countryCode;
-    private String price;
+    private BigDecimal price;
     private String link;
 
     @JsonCreator
-    public Country(@JsonProperty("country_code") String countryCode, @JsonProperty("price") String price, @JsonProperty("link") String link) {
+    public Country(@JsonProperty("country_code") String countryCode, @JsonProperty("price") BigDecimal price, @JsonProperty("link") String link) {
         this.countryCode = countryCode;
         this.price = price;
         this.link = link;
@@ -25,11 +27,11 @@ public class Country extends ResourceSupport {
         this.countryCode = countryCode;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

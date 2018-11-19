@@ -57,12 +57,12 @@ public class Scraper {
     }
 
     // Country ref's: https://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
-    public float convertCurrency(String amount, Locale locale) throws ParseException {
+    public BigDecimal convertCurrency(String amount, Locale locale) throws ParseException {
         final NumberFormat format = NumberFormat.getNumberInstance(locale);
         if (format instanceof DecimalFormat) {
             ((DecimalFormat) format).setParseBigDecimal(true);
         }
-        return (float) format.parse(amount.replaceAll("[^\\d.,]",""));
+        return (BigDecimal) format.parse(amount.replaceAll("[^\\d.,]",""));
     }
 
     public boolean hasBadKeyword(String text) {
@@ -140,13 +140,17 @@ public class Scraper {
         }
 
         org.jsoup.nodes.Document doc = Jsoup.parse(html);
-        String price = null;
+        BigDecimal price = null;
 
         try {
             Elements elPrice = doc.select("td");
             Element e = elPrice.get(4);
 
-            price = e.text();
+            System.out.println(e.text());
+            System.out.println(domain);
+            System.out.println(convertDomainToLocale(domain));
+            price = convertCurrency(e.text(), convertDomainToLocale(domain));
+            System.out.println("PRICE: " + price);
         } catch (Exception e) {
             System.out.println("URL: " + searchPage + ", ERROR: " + e.getMessage());
             return null;
