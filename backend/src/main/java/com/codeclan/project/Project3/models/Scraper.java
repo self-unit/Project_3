@@ -39,6 +39,23 @@ public class Scraper {
         return null;
     }
 
+    public Locale convertDomainToLocale(String domain) {
+        switch (domain) {
+            case ".co.uk": return Locale.UK;
+            case ".com": return Locale.US;
+            case ".de": return Locale.GERMANY;
+            case ".fr": return Locale.FRANCE;
+            case ".it": return Locale.ITALY;
+            case ".co.jp": return Locale.JAPAN;
+            case ".ca": return Locale.CANADA;
+            case ".es": return Locale.forLanguageTag("es_ES");
+            case ".com.mx": return Locale.forLanguageTag("es_MX");
+            case ".com.br": return Locale.forLanguageTag("pt");
+
+            default: return null;
+        }
+    }
+
     // Country ref's: https://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
     public float convertCurrency(String amount, Locale locale) throws ParseException {
         final NumberFormat format = NumberFormat.getNumberInstance(locale);
