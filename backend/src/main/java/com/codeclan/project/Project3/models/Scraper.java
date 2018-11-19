@@ -146,11 +146,7 @@ public class Scraper {
             Elements elPrice = doc.select("td");
             Element e = elPrice.get(4);
 
-            System.out.println(e.text());
-            System.out.println(domain);
-            System.out.println(convertDomainToLocale(domain));
             price = convertCurrency(e.text(), convertDomainToLocale(domain));
-            System.out.println("PRICE: " + price);
         } catch (Exception e) {
             System.out.println("URL: " + searchPage + ", ERROR: " + e.getMessage());
             return null;
